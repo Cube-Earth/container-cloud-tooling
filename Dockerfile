@@ -26,8 +26,8 @@ ENV PATH=$PATH:/home/user/.local/bin \
 	TF_DATA_DIR="/home/user/terraform_home"
 
 RUN mkdir /tmp/terraform /home/user/terraform_home && \
-	echo "provider "aws" {}" > /tmp/terraform/providers.tf && \
 	cd /tmp/terraform && \
+	echo -e "provider \"aws\" {}\nprovider \"template\" {}" > providers.tf && \
 	terraform init
 
 RUN echo "====================================" && \
