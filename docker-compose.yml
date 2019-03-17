@@ -1,0 +1,14 @@
+version: '3'
+services:
+  main:
+    build:
+        context: .
+        args:
+            - http_proxy
+            - https_proxy
+            - no_proxy
+    image: cubeearth/cloud-tooling
+    volumes:
+    - $HOME/.aws:/home/user/.aws
+    - ./terraform_scripts:/home/user/terraform_scripts
+    - ./terraform_data:/home/user/terraform_data
