@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk --no-cache add git jq curl bash zip xmlstarlet python3 openssl openssh-keygen util-linux && \
+RUN apk --no-cache add git jq curl bash zip xmlstarlet python3 openssl openssh-keygen util-linux make && \
 	adduser -D -g '' -s /sbin/nologin user
 
 WORKDIR /tmp	
@@ -17,6 +17,11 @@ RUN apk add --update wget ca-certificates && \
 	echo "https://github.com/Cube-Earth/alpine-tools/releases/download/repository" >> /etc/apk/repositories && \
 	apk add --no-cache coreos-ct
 	
+RUN apk --no-cache add libffi gcc python3-dev linux-headers musl-dev libffi-dev openssl-dev && \
+    ln -s /usr/bin/python3 /usr/bin/python && \
+	echo -e "/usr/lib/azure-cli\n/usr/bin\nn\n" > /tmp/az.rsp && \
+	curl -L https://aka.ms/InstallAzureCli | sed -e "s#/dev/tty#/tmp/az.rsp#g" -e "s/XXXX/XXXXXX/g" | bash
+	
 USER user	
 RUN pip install awscli --upgrade --user
 
@@ -27,13 +32,15 @@ ENV PATH=$PATH:/home/user/.local/bin \
 
 RUN mkdir /tmp/terraform /home/user/terraform_home && \
 	cd /tmp/terraform && \
-	echo -e "provider \"aws\" {}\nprovider \"template\" {}" > providers.tf && \
+	echo -e "provider \"aws\" {}\nprovider \"azurerm\" {}\nprovider \"template\" {}" > providers.tf && \
 	terraform init
 
 RUN echo "====================================" && \
 	ct --version && \
 	terraform -v && \
 	aws --version && \
+	echo "-----------" && \
+	az --version && \
 	echo "===================================="
 
 ENTRYPOINT [ "/bin/bash", "-l" ]
