@@ -10,5 +10,5 @@ services:
     image: cubeearth/cloud-tooling
     volumes:
     - $HOME/.aws:/home/user/.aws
-    - ./terraform_scripts:/home/user/terraform_scripts
-    - ./terraform_data:/home/user/terraform_data
+    - ./tf-scripts:/home/user/terraform_scripts
+    - ./tf-data:/home/user/terraform_data

@@ -32,7 +32,7 @@ ENV PATH=$PATH:/home/user/.local/bin \
 
 RUN mkdir /tmp/terraform /home/user/terraform_home && \
 	cd /tmp/terraform && \
-	echo -e "provider \"aws\" {}\nprovider \"azurerm\" {}\nprovider \"template\" {}" > providers.tf && \
+	echo -e "provider \"aws\" {}\nprovider \"azurerm\" {}\nprovider \"template\" {}\nprovider \"random\" {}" > providers.tf && \
 	terraform init
 
 RUN echo "====================================" && \
